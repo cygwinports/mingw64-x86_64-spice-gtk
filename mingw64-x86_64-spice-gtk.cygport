@@ -1,0 +1,90 @@
+CROSS_HOST="x86_64-w64-mingw32"
+inherit cross gnome2
+
+NAME="mingw64-x86_64-spice-gtk"
+VERSION=0.22
+RELEASE=1
+CATEGORY="Devel"
+SUMMARY="SPICE GTK+ client library for Win64 toolchain"
+DESCRIPTION="The Spice project aims to provide a complete open source solution
+for interaction with virtualized desktop devices. The Spice project deals with
+both the virtualized devices and the front-end. Interaction between front-end
+and back-end is done using VD-Interfaces, which can be easily utilitzed by a
+third-party component."
+HOMEPAGE="http://spice-space.org/"
+SRC_URI="http://spice-space.org/download/gtk/spice-gtk-${VERSION}.tar.bz2"
+SRC_DIR="spice-gtk-${VERSION}"
+PATCH_URI="
+	http://pkgs.fedoraproject.org/cgit/mingw-spice-gtk.git/plain/0001-coroutine-add-missing-glib.h-include.patch
+"
+
+DEPEND="gnome-common
+	pkgconfig(celt051)
+	pkgconfig(gtk+-2.0)
+	pkgconfig(gtk+-3.0)
+	pkgconfig(openssl)
+	pkgconfig(pixman-1)
+	pkgconfig(spice-protocol)
+	pkgconfig(zlib)
+	libjpeg-devel"
+
+PKG_NAMES="mingw64-x86_64-spice-glib2.0 ${NAME}2.0 ${NAME}3.0 mingw64-x86_64-spice-controller"
+mingw64_x86_64_spice_glib2_0_SUMMARY="GObject SPICE client library for Win64 toolchain"
+mingw64_x86_64_spice_glib2_0_CONTENTS="
+	${CROSS_BINDIR#/}/libspice-client-glib-2.0-8.dll
+	${CROSS_INCLUDEDIR#/}/spice-client-glib-2.0/
+	${CROSS_LIBDIR#/}/libspice-client-glib-2.0.*
+	${CROSS_LIBDIR#/}/pkgconfig/spice-client-glib-2.0.pc
+	${CROSS_DATADIR#/}/locale/ usr/share/doc/"
+mingw64_x86_64_spice_gtk2_0_SUMMARY="GTK+2 SPICE widget library for Win64 toolchain"
+mingw64_x86_64_spice_gtk2_0_CONTENTS="
+	${CROSS_BINDIR#/}/libspice-client-gtk-2.0-4.dll
+	${CROSS_INCLUDEDIR#/}/spice-client-gtk-2.0/
+	${CROSS_LIBDIR#/}/libspice-client-gtk-2.0.*
+	${CROSS_LIBDIR#/}/pkgconfig/spice-client-gtk-2.0.pc"
+mingw64_x86_64_spice_gtk3_0_SUMMARY="GTK+3 SPICE widget library for Win64 toolchain"
+mingw64_x86_64_spice_gtk3_0_CONTENTS="
+	${CROSS_BINDIR#/}/libspice-client-gtk-3.0-4.dll
+	${CROSS_INCLUDEDIR#/}/spice-client-gtk-3.0/
+	${CROSS_LIBDIR#/}/libspice-client-gtk-3.0.*
+	${CROSS_LIBDIR#/}/pkgconfig/spice-client-gtk-3.0.pc"
+mingw64_x86_64_spice_controller_SUMMARY="GObject SPICE controller library for Win64 toolchain"
+mingw64_x86_64_spice_controller_CONTENTS="
+	${CROSS_BINDIR#/}/libspice-controller-0.dll
+	${CROSS_INCLUDEDIR#/}/spice-controller/
+	${CROSS_LIBDIR#/}/libspice-controller.*
+	${CROSS_LIBDIR#/}/pkgconfig/spice-controller.pc"
+
+CYGCONF_ARGS="
+	--disable-gtk-doc
+	--disable-smartcard
+	--disable-usbredir
+	--disable-vala
+	--disable-werror
+	--with-audio=gstreamer
+	--with-coroutine=winfiber
+	--without-python
+	--without-sasl
+	rra_cv_ld_version_script=no
+"
+
+src_compile() {
+	cd ${S}
+	mkdir -p spice-common/spice-protocol/m4
+	gnome2_autoreconf
+
+	mkdir -p ${B}/gtk2
+	cd ${B}/gtk2
+	gnome2_compile --with-gtk=2.0
+
+	mkdir -p ${B}/gtk3
+	cd ${B}/gtk3
+	gnome2_compile --with-gtk=3.0
+}
+
+src_install() {
+	cd ${B}/gtk2
+	cyginstall bin_PROGRAMS= policy_DATA= vapi_DATA=
+	cd ${B}/gtk3
+	cyginstall bin_PROGRAMS= policy_DATA= vapi_DATA=
+}
