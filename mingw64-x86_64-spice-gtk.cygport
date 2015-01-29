@@ -2,7 +2,7 @@ CROSS_HOST="x86_64-w64-mingw32"
 inherit cross gnome2
 
 NAME="mingw64-x86_64-spice-gtk"
-VERSION=0.22
+VERSION=0.27
 RELEASE=1
 CATEGORY="Devel"
 SUMMARY="SPICE GTK+ client library for Win64 toolchain"
@@ -14,9 +14,6 @@ third-party component."
 HOMEPAGE="http://spice-space.org/"
 SRC_URI="http://spice-space.org/download/gtk/spice-gtk-${VERSION}.tar.bz2"
 SRC_DIR="spice-gtk-${VERSION}"
-PATCH_URI="
-	http://pkgs.fedoraproject.org/cgit/mingw-spice-gtk.git/plain/0001-coroutine-add-missing-glib.h-include.patch
-"
 
 DEPEND="gnome-common
 	pkgconfig(celt051)
@@ -58,7 +55,6 @@ mingw64_x86_64_spice_controller_CONTENTS="
 CYGCONF_ARGS="
 	--disable-gtk-doc
 	--disable-smartcard
-	--disable-usbredir
 	--disable-vala
 	--disable-werror
 	--with-audio=gstreamer
