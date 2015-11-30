@@ -2,7 +2,7 @@ CROSS_HOST="x86_64-w64-mingw32"
 inherit cross gnome2
 
 NAME="mingw64-x86_64-spice-gtk"
-VERSION=0.27
+VERSION=0.30
 RELEASE=1
 CATEGORY="Devel"
 SUMMARY="SPICE GTK+ client library for Win64 toolchain"
