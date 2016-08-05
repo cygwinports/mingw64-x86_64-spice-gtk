@@ -2,7 +2,7 @@ CROSS_HOST="x86_64-w64-mingw32"
 inherit cross gnome2
 
 NAME="mingw64-x86_64-spice-gtk"
-VERSION=0.30
+VERSION=0.31
 RELEASE=1
 CATEGORY="Devel"
 SUMMARY="SPICE GTK+ client library for Win64 toolchain"
@@ -52,6 +52,8 @@ mingw64_x86_64_spice_controller_CONTENTS="
 	${CROSS_LIBDIR#/}/libspice-controller.*
 	${CROSS_LIBDIR#/}/pkgconfig/spice-controller.pc"
 
+DIFF_EXCLUDES="spice-version.h"
+
 CYGCONF_ARGS="
 	--disable-gtk-doc
 	--disable-smartcard
@@ -80,7 +82,7 @@ src_compile() {
 
 src_install() {
 	cd ${B}/gtk2
-	cyginstall bin_PROGRAMS= policy_DATA= vapi_DATA=
+	cyginstall bin_PROGRAMS= dist_man_MANS= policy_DATA= vapi_DATA=
 	cd ${B}/gtk3
-	cyginstall bin_PROGRAMS= policy_DATA= vapi_DATA=
+	cyginstall bin_PROGRAMS= dist_man_MANS= policy_DATA= vapi_DATA=
 }
