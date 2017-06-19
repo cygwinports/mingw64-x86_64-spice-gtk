@@ -2,7 +2,7 @@ CROSS_HOST="x86_64-w64-mingw32"
 inherit cross gnome2
 
 NAME="mingw64-x86_64-spice-gtk"
-VERSION=0.31
+VERSION=0.33
 RELEASE=1
 CATEGORY="Devel"
 SUMMARY="SPICE GTK+ client library for Win64 toolchain"
@@ -17,7 +17,6 @@ SRC_DIR="spice-gtk-${VERSION}"
 
 DEPEND="gnome-common
 	pkgconfig(celt051)
-	pkgconfig(gtk+-2.0)
 	pkgconfig(gtk+-3.0)
 	pkgconfig(openssl)
 	pkgconfig(pixman-1)
@@ -25,7 +24,7 @@ DEPEND="gnome-common
 	pkgconfig(zlib)
 	libjpeg-devel"
 
-PKG_NAMES="mingw64-x86_64-spice-glib2.0 ${NAME}2.0 ${NAME}3.0 mingw64-x86_64-spice-controller"
+PKG_NAMES="mingw64-x86_64-spice-glib2.0 ${NAME}3.0 mingw64-x86_64-spice-controller"
 mingw64_x86_64_spice_glib2_0_SUMMARY="GObject SPICE client library for Win64 toolchain"
 mingw64_x86_64_spice_glib2_0_CONTENTS="
 	${CROSS_BINDIR#/}/libspice-client-glib-2.0-8.dll
@@ -33,15 +32,9 @@ mingw64_x86_64_spice_glib2_0_CONTENTS="
 	${CROSS_LIBDIR#/}/libspice-client-glib-2.0.*
 	${CROSS_LIBDIR#/}/pkgconfig/spice-client-glib-2.0.pc
 	${CROSS_DATADIR#/}/locale/ usr/share/doc/"
-mingw64_x86_64_spice_gtk2_0_SUMMARY="GTK+2 SPICE widget library for Win64 toolchain"
-mingw64_x86_64_spice_gtk2_0_CONTENTS="
-	${CROSS_BINDIR#/}/libspice-client-gtk-2.0-4.dll
-	${CROSS_INCLUDEDIR#/}/spice-client-gtk-2.0/
-	${CROSS_LIBDIR#/}/libspice-client-gtk-2.0.*
-	${CROSS_LIBDIR#/}/pkgconfig/spice-client-gtk-2.0.pc"
 mingw64_x86_64_spice_gtk3_0_SUMMARY="GTK+3 SPICE widget library for Win64 toolchain"
 mingw64_x86_64_spice_gtk3_0_CONTENTS="
-	${CROSS_BINDIR#/}/libspice-client-gtk-3.0-4.dll
+	${CROSS_BINDIR#/}/libspice-client-gtk-3.0-5.dll
 	${CROSS_INCLUDEDIR#/}/spice-client-gtk-3.0/
 	${CROSS_LIBDIR#/}/libspice-client-gtk-3.0.*
 	${CROSS_LIBDIR#/}/pkgconfig/spice-client-gtk-3.0.pc"
@@ -71,18 +64,12 @@ src_compile() {
 	mkdir -p spice-common/spice-protocol/m4
 	gnome2_autoreconf
 
-	mkdir -p ${B}/gtk2
-	cd ${B}/gtk2
-	gnome2_compile --with-gtk=2.0
-
 	mkdir -p ${B}/gtk3
 	cd ${B}/gtk3
 	gnome2_compile --with-gtk=3.0
 }
 
 src_install() {
-	cd ${B}/gtk2
-	cyginstall bin_PROGRAMS= dist_man_MANS= policy_DATA= vapi_DATA=
 	cd ${B}/gtk3
 	cyginstall bin_PROGRAMS= dist_man_MANS= policy_DATA= vapi_DATA=
 }
